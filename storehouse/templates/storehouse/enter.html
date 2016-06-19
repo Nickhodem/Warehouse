@@ -1,0 +1,13 @@
+{% extends 'storehouse/base.html' %}
+{% block content %}
+    <h1>Warehouse</h1>
+    {{ wares|length }}
+        <p>
+            {% for ware in wares %}
+                <ul>
+                <li>{{ forloop.counter }} <b style = "color:#1246a1;"><a href="{% url 'detail_id' ware.id %}">{{ ware.name|upper }}</a></b> ilość: {{ware.quantity}} id:{{ ware.id }}</li>
+
+                </ul>
+            {% endfor %}
+        </p>
+{% endblock content %}

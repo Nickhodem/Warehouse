@@ -1,0 +1,10 @@
+{% extends 'storehouse/base.html' %}
+
+{% block content %}
+    <h1>Submit order</h1>
+    <form class="post-form" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'storehouse/base.html' %}
+
+{% block content %}
+    <h1>Add new provider</h1>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+
+
+<!--{{ form.non_field_errors }}-->
+
+<!--<div class="fieldWrapper">-->
+    <!--{{ form.name.errors }}-->
+    <!--<label for="{{ form.name.id_for_label }}">Provider name:</label>-->
+    <!--{{ form.name }}-->
+<!--</div>-->
+<!--<div class="fieldWrapper">-->
+    <!--{{ form.url.errors }}-->
+    <!--<label for="{{ form.url.id_for_label }}">url:</label>-->
+    <!--{{ form.url }}-->
+<!--</div>-->
+<!--<div class="fieldWrapper">-->
+    <!--{{ form.phone.errors }}-->
+    <!--<label for="{{ form.phone.id_for_label }}">Phone:</label>-->
+    <!--{{ form.phone }}-->
+<!--</div>-->
+<!--<div class="fieldWrapper">-->
+    <!--{{ form.email.errors }}-->
+    <!--<label for="{{ form.email.id_for_label }}">email:</label>-->
+    <!--{{ form.email }}-->
+<!--</div>-->
+<!--<button type="submit" class="save btn btn-default">Save</button>-->
+{% endblock %}
