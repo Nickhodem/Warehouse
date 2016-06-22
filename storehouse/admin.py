@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Ware, Provider,Product, Order
+from .models import Ware, Provider,Product, Order, UserProfile
 
 
 class PageWare(admin.ModelAdmin):
@@ -14,7 +14,7 @@ class PageProduct(admin.ModelAdmin):
 class PageOrder(admin.ModelAdmin):
     list_display = ('name', 'product', 'status_open', 'client', 'notes')
 
-
+admin.site.register(UserProfile)
 admin.site.register(Ware, PageWare)
 admin.site.register(Provider)
 admin.site.register(Product,PageProduct)

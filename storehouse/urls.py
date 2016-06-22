@@ -10,5 +10,5 @@ urlpatterns = [
     url(r'^neworder/$', views.neworder, name='new_order'),
     url(r'^ware/(?P<product_id>[0-9]+)/$', views.waredetails_id, name='detail_id'),
     url(r'^ware/(?P<product_name>\w+)/$', views.waredetails_name, name='detail_name'),
-
+    url(r'^register/$', views.register, name='register'),
 ]
