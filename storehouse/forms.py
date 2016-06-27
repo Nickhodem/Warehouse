@@ -6,7 +6,7 @@ class WareForm(forms.ModelForm):
 
     class Meta:
         model = Ware
-        fields = ('idx', 'name','quantity','provider_name','provider_url')
+        fields = ('idx', 'name','quantity','provider_name','provider_url','provider')
 
 
 class ProviderForm(forms.ModelForm):

@@ -1,16 +1,48 @@
-from django.shortcuts import render, Http404, get_object_or_404,RequestContext, \
+from django.shortcuts import render, Http404, get_object_or_404, RequestContext, \
     render_to_response, HttpResponseRedirect, HttpResponse
 from django.http import HttpResponseNotFound
 from .models import Ware
 from .forms import WareForm, ProviderForm, ProductForm, OrderProduct, OrderForm, UserForm, UserProfileForm
 from django.utils import timezone
 from django.shortcuts import redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 
 def enter(request):
-    wares = Ware.objects.order_by('quantity')
-    return render(request, 'storehouse/enter.html', {'wares': wares})
+    wares = Ware.objects.all()
+    ware_views = Ware.objects.order_by('views')[:5]
+
+    visits = int(request.COOKIES.get('visits', '1'))
+
+    context_dict = {'wares': wares, 'views': ware_views, 'visits': visits}
+    reset_last_visit_time = False
+    response = render(request, 'storehouse/enter.html', context_dict)
+
+    if 'last_visit' in request.COOKIES:
+        # Yes it does! Get the cookie's value.
+        last_visit = request.COOKIES['last_visit']
+        # Cast the value to a Python date/time object.
+        last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
+
+        if (datetime.now() - last_visit_time).days > 0:
+            visits += 1
+            # ...and flag that the cookie last visit needs to be updated
+            reset_last_visit_time = True
+    else:
+        # Cookie last_visit doesn't exist, so flag that it should be set.
+        reset_last_visit_time = True
+        context_dict['visits'] = visits
+        # Obtain our Response object early so we can add cookie information.
+        response = render(request, 'storehouse/enter.html', context_dict)
+    print visits
+    if reset_last_visit_time:
+        response.set_cookie('last_visit', datetime.now())
+        response.set_cookie('visits', visits)
+
+    return response
+
 
 '''
 def waredetails_id(request, product_id):
@@ -23,14 +55,14 @@ def waredetails_id(request, product_id):
 '''
 
 
+@login_required(login_url='login')
 def waredetails_id(request, product_id):
-
-    detail = get_object_or_404(Ware,id=product_id)
+    detail = get_object_or_404(Ware, id=product_id)
     return render(request, 'storehouse/ware_detail.html', {'detail': detail})
 
 
+@login_required(login_url='login')
 def waredetails_name(request, product_name):
-
     detail = Ware.objects.filter(name=product_name)
 
     if not detail:
@@ -39,6 +71,7 @@ def waredetails_name(request, product_name):
         return render(request, 'storehouse/ware_detail.html', {'detail': detail})
 
 
+@login_required(login_url='login')
 def newitem(request):
     if request.method == "POST":
         form = WareForm(request.POST)
@@ -53,6 +86,7 @@ def newitem(request):
         return render(request, 'storehouse/new_item.html', {'form': form})
 
 
+@login_required(login_url='login')
 def newprovider(request):
     if request.method == "POST":
         form = ProviderForm(request.POST)
@@ -65,6 +99,7 @@ def newprovider(request):
         return render(request, 'storehouse/new_provider.html', {'form': form})
 
 
+@login_required(login_url='login')
 def newproduct(request):
     form = ProductForm(request.POST)
     if request.method == "POST":
@@ -77,6 +112,7 @@ def newproduct(request):
         return render(request, 'storehouse/new_product.html', {'form': form})
 
 
+@login_required(login_url='login')
 def neworder(request):
     if request.method == "POST":
         form = OrderForm(request.POST)
@@ -99,7 +135,7 @@ def getorder(request):
 
     return render(request, 'storehouse/get_order.html', {'form': form})
 
-
+'''
 def register(request):
     context = RequestContext(request)
     registered = False
@@ -124,11 +160,11 @@ def register(request):
         user_form = UserForm()
         profile_form = UserProfileForm()
 
-    return render_to_response('storehouse/register.html', {'user_form': user_form, 'profile_form': profile_form, 'registered': registered}, context)
+    return render_to_response('storehouse/register.html',
+                              {'user_form': user_form, 'profile_form': profile_form, 'registered': registered}, context)
 
 
 def user_login(request):
-
     context = RequestContext(request)
     if request.method == 'POST':
         username = request.POST['username']
@@ -144,4 +180,14 @@ def user_login(request):
             print "Invalid login details: {0}, {1}".format(username, password)
             return HttpResponse("Invalid login details supplied.")
     else:
-        return render_to_response('storehouse/login.html', {}, context)
+        return render(request, 'storehouse/login.html', {})
+
+
+@login_required
+def user_logout(request):
+    # Since we know the user is logged in, we can now just log them out.
+    logout(request)
+
+    # Take the user back to the homepage.
+    return HttpResponseRedirect('/storehouse/')
+'''

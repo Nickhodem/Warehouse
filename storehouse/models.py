@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+
 class Provider(models.Model):
     name = models.CharField(max_length=1000, primary_key= True)
     url = models.URLField(blank=True)
@@ -23,6 +24,7 @@ class Ware(models.Model):
     provider_name = models.CharField(max_length=1000)
     provider_url = models.URLField(blank=True)
     provider = models.ForeignKey(Provider)
+    views = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
