@@ -1,0 +1,15 @@
+
+
+    <h1>Wares</h1>
+{% if waresnew %}
+    <ul class="nav nav-sidebar">
+    {% for ware in waresnew %}
+        <li>{{ forloop.counter }} <b style = "color:#1246a1;"><a href="{% url 'detail_id' ware.id %}">{{ ware.name|upper }}</a></li>
+    {% endfor %}
+
+{% else %}
+    <li> <strong >There are no category present.</strong></li>
+
+    </ul>
+{% endif %}
+
