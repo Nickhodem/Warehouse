@@ -136,6 +136,23 @@ def getorder(request):
 
 
 
+@login_required
+def like_views(request):
+
+    cat_id = None
+    if request.method == 'GET':
+        cat_id = request.GET['category_id']
+    print 'cat id: ', cat_id
+    likes = 0
+    if cat_id:
+        cat = Ware.objects.get(id=int(cat_id))
+        if cat:
+            likes = cat.likes + 1
+            cat.likes = likes
+            cat.save()
+
+    return HttpResponse(likes)
+
 '''
 def register(request):
     context = RequestContext(request)

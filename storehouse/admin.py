@@ -3,9 +3,10 @@ from .models import Ware, Provider,Product, Order, UserProfile
 
 
 class PageWare(admin.ModelAdmin):
-    list_display = ('id','idx', 'name', 'quantity')
+    list_display = ('id','idx', 'name', 'quantity', 'views')
     search_fields = ['name', 'quantity']
     list_filter = ('id','idx', 'name', 'quantity')
+
 
 class PageProduct(admin.ModelAdmin):
     list_display = ('name', 'model')
