@@ -21,5 +21,4 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^storehouse/', include('storehouse.urls')),
     url(r'^accounts/', include('registration.backends.simple.urls')),
-
 ]

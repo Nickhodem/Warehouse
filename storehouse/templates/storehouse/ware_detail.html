@@ -4,4 +4,14 @@
     <p>{{ detail }}</p>
     <p>name: {{ detail.name }}</p>
     <p>quantity: {{ detail.quantity }}</p>
+
+    <p><strong id="like_count">{{ detail.views }}</strong>
+    {% if user.is_authenticated %}
+    <button id="likes" data-catid="{{detail.id}}" class="btn btn-primary" type="button">
+    <span class="glyphicon glyphicon-thumbs-up"></span>
+    Like
+    </button>
+    {% endif %}
+    </p>
+
 {% endblock content %}

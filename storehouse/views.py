@@ -55,23 +55,22 @@ def waredetails_id(request, product_id):
 '''
 
 
-@login_required(login_url='login')
+@login_required
 def waredetails_id(request, product_id):
     detail = get_object_or_404(Ware, id=product_id)
     return render(request, 'storehouse/ware_detail.html', {'detail': detail})
 
 
-@login_required(login_url='login')
+@login_required
 def waredetails_name(request, product_name):
     detail = Ware.objects.filter(name=product_name)
-
     if not detail:
         return HttpResponseNotFound('any product has id %s' % product_name)
     else:
         return render(request, 'storehouse/ware_detail.html', {'detail': detail})
 
 
-@login_required(login_url='login')
+@login_required
 def newitem(request):
     if request.method == "POST":
         form = WareForm(request.POST)
@@ -86,7 +85,7 @@ def newitem(request):
         return render(request, 'storehouse/new_item.html', {'form': form})
 
 
-@login_required(login_url='login')
+@login_required
 def newprovider(request):
     if request.method == "POST":
         form = ProviderForm(request.POST)
@@ -99,7 +98,7 @@ def newprovider(request):
         return render(request, 'storehouse/new_provider.html', {'form': form})
 
 
-@login_required(login_url='login')
+@login_required
 def newproduct(request):
     form = ProductForm(request.POST)
     if request.method == "POST":
@@ -112,7 +111,7 @@ def newproduct(request):
         return render(request, 'storehouse/new_product.html', {'form': form})
 
 
-@login_required(login_url='login')
+@login_required
 def neworder(request):
     if request.method == "POST":
         form = OrderForm(request.POST)
@@ -134,6 +133,25 @@ def getorder(request):
         form = OrderProduct()
 
     return render(request, 'storehouse/get_order.html', {'form': form})
+
+
+
+@login_required
+def like_views(request):
+
+    cat_id = None
+    if request.method == 'GET':
+        cat_id = request.GET['category_id']
+    print 'cat id: ', cat_id
+    likes = 0
+    if cat_id:
+        cat = Ware.objects.get(id=int(cat_id))
+        if cat:
+            likes = cat.likes + 1
+            cat.likes = likes
+            cat.save()
+
+    return HttpResponse(likes)
 
 '''
 def register(request):
