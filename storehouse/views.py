@@ -80,6 +80,8 @@ def newitem(request):
             post.created_date = timezone.now()
             post.save()
             return redirect('enter')
+        else:
+            return render(request, 'storehouse/notbangla.html', {})
     else:
         form = WareForm()
         return render(request, 'storehouse/new_item.html', {'form': form})
@@ -93,6 +95,8 @@ def newprovider(request):
             post = form.save(commit=False)
             post.save()
             return redirect('enter')
+        else:
+            return render(request, 'storehouse/notbangla.html', {})
     else:
         form = ProviderForm()
         return render(request, 'storehouse/new_provider.html', {'form': form})
@@ -106,6 +110,8 @@ def newproduct(request):
             post = form.save(commit=False)
             post.save()
             return redirect('enter')
+        else:
+            return render(request, 'storehouse/notbangla.html', {})
     else:
         form = ProductForm()
         return render(request, 'storehouse/new_product.html', {'form': form})
@@ -119,6 +125,8 @@ def neworder(request):
             post = form.save(commit=False)
             post.save()
             return redirect('enter')
+        else:
+            return render(request, 'storehouse/notbangla.html', {})
     else:
         form = OrderForm()
         return render(request, 'storehouse/new_order.html', {'form': form})
@@ -129,11 +137,12 @@ def getorder(request):
         form = OrderProduct(request.POST)
         if form.is_valid():
             return redirect('enter')
+        else:
+            return render(request, 'storehouse/notbangla.html', {})
     else:
         form = OrderProduct()
 
     return render(request, 'storehouse/get_order.html', {'form': form})
-
 
 
 @login_required
@@ -147,11 +156,23 @@ def like_views(request):
     if cat_id:
         cat = Ware.objects.get(id=int(cat_id))
         if cat:
-            likes = cat.likes + 1
-            cat.likes = likes
+            likes = cat.views + 1
+            cat.views = likes
             cat.save()
 
     return HttpResponse(likes)
+
+
+def check_name(request):
+    print 'get request ', request.GET['newviewname']
+    if request.GET.has_key('newviewname'):
+        try:
+            Ware.objects.get(name=request.GET['newviewname'])
+        except:
+            return HttpResponse('nazwa wolna')
+        else:
+            return HttpResponse('nazwa zajeta')
+    return HttpResponse('')
 
 '''
 def register(request):

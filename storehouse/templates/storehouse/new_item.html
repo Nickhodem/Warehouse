@@ -2,11 +2,25 @@
 
 {% block content %}
     <h1>Add new item</h1>
-    <form method="POST" class="post-form">{% csrf_token %}
-        {{ form.as_p }}
+    <!--<form method="POST" class="post-form">{% csrf_token %}-->
+        <!--{{ form.as_p }}-->
 
-        <button type="submit" class="save btn btn-default">Save</button>
+        <!--<button type="submit" class="save btn btn-default">Save</button>-->
 
-    </form>
+    <!--</form>-->
+
+
+<div id="aj" style="text-align:center;"></div>
+<form action="." method="post" name="r">{% csrf_token %}
+    Nazwa<br>
+    <span id="namealert">wpisz nazwe</span>
+<input type="text" id="item_name" name="name" size="20" value="{{ data.name }}" maxlength="200" />
+    <br>
+    Provider
+    <br>
+
+<input type="text" id="item_provider" name="provider_url" size="20" value="{{ data.provider_url }}" maxlength="75" />
+<input type="submit" value="Dodaj nowy item">
+</form>
 
 {% endblock %}
